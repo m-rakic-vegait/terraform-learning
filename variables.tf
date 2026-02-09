@@ -10,12 +10,12 @@ variable "region" {
 
 variable "tags" {
   type = object({
-    name = string
+    owner = string
     environment = string
   })
   validation {
-    condition = contains(keys(var.tags), "name")
-    error_message = "The key 'name' is required."
+    condition = contains(keys(var.tags), "owner")
+    error_message = "The key 'owner' is required."
   }
   validation {
     condition = contains(keys(var.tags), "environment")
@@ -48,11 +48,6 @@ variable "security_group_description" {
   description = "Description of security group with SSH access"
 }
 
-variable "mr_my_subnet" {
-  type = string
-  description = "My subnet"
-}
-
 variable "mr_instance_type" {
   type = string
   description = "EC2 Instance Type"
@@ -64,4 +59,33 @@ variable "mr_instance_type" {
 
 variable "mr_instance_name" {
   type = string
+}
+
+# VPC variables
+variable "vpc_cidr" {
+  type = string
+  description = "CIDR block for the VPC"
+}
+
+# For the same purpose, different named variables are used in order to check usage.
+# In root/main.tf, "subnet_cidr" variable is used.
+# In modules/vpc/main.tf "public_subnet" variable is used.
+variable "subnet_cidr" {
+  type = string
+  description = "CIDR block for the subnet"
+}
+
+variable "private_subnets" {
+  type = list(string)
+  description = "The list of private subnets"
+}
+
+variable "availability_zone" {
+  type = string
+  description = "AWS Availability Zone for the subnet"
+}
+
+variable "vpc_name" {
+  type = string
+  description = "VPC name"
 }

@@ -140,7 +140,7 @@ module "mr_security_group" {
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = var.mr_my_subnet
+      cidr_blocks = var.subnet_cidr
     }
   ]
   egress_with_cidr_blocks = [
@@ -173,3 +173,15 @@ module "ec2_instance" {
 
 # 3.7. Multiple environments - Use .tfvars files for dev/prod configurations
 # Added env.tfvars and prod.tfvars in envs folder
+
+# 4.1. Create VPC module
+module "vpc" {
+  source = "./modules/vpc"
+
+  vpc_cidr = var.vpc_cidr
+  public_subnet = var.subnet_cidr
+  private_subnets = var.private_subnets
+  availability_zone = var.availability_zone
+  vpc_name = var.vpc_name
+  tags = var.tags
+}
