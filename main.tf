@@ -167,5 +167,8 @@ module "ec2_instance" {
 }
 
 # 3.5. Conditional logic - Use count or for_each for optional resource creation
+
 # 3.6. Variable validation - Add validation rules and descriptions for input variables
+# Added in variables.tf for mr_instance_type
+
 # 3.7. Multiple environments - Use .tfvars files for dev/prod configurations

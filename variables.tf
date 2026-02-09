@@ -1,13 +1,11 @@
 variable "environment" {
   type = string
   description = "Environment"
-  default = "dev"
 }
 
 variable "region" {
   type = string
   description = "AWS Region"
-  default = "eu-central-1"
 }
 
 variable "tags" {
