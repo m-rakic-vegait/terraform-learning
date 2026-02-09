@@ -177,11 +177,21 @@ module "ec2_instance" {
 # 4.1. Create VPC module
 module "vpc" {
   source = "./modules/vpc"
-
   vpc_cidr = var.vpc_cidr
   public_subnet = var.subnet_cidr
   private_subnets = var.private_subnets
   availability_zone = var.availability_zone
   vpc_name = var.vpc_name
   tags = var.tags
+}
+
+module "lambda-mr" {
+  source = "./modules/lambda_api"
+  lambda_name = var.lambda_name
+  lambda_handler = var.lambda_handler
+  lambda_runtime = var.lambda_runtime
+  lambda_timeout = var.lambda_timeout
+  lambda_memory = var.lambda_memory
+  tags = var.tags
+  environment = var.environment
 }

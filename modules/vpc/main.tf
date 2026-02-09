@@ -45,12 +45,14 @@ resource "aws_route_table" "public" {
   )
 }
 
+# Route
 resource "aws_route" "public_route" {
   route_table_id = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id = aws_internet_gateway.this.id
 }
 
+# Private subnets
 resource "aws_subnet" "private" {
   for_each = toset(var.private_subnets)
 
