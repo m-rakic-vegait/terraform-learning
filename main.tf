@@ -172,3 +172,4 @@ module "ec2_instance" {
 # Added in variables.tf for mr_instance_type
 
 # 3.7. Multiple environments - Use .tfvars files for dev/prod configurations
+# Added env.tfvars and prod.tfvars in envs folder
