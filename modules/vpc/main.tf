@@ -1,6 +1,3 @@
-# 4.2. Module structure - Organize with main.tf, variables.tf, outputs.tf files
-# 4.3. Network components - Create VPC, subnet, Internet Gateway
-
 # VPC
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr

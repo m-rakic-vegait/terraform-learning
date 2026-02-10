@@ -8,6 +8,11 @@ variable "region" {
   description = "AWS Region"
 }
 
+variable "aws_profile" {
+  type = string
+  description = "The name of aws profile"
+}
+
 variable "tags" {
   type = object({
     owner = string
