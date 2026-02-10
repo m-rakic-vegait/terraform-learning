@@ -76,8 +76,8 @@ resource "aws_iam_policy" "mr_custom" {
         "s3-object-lambda:List*"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.bucket_name}-*",
-        "arn:aws:s3:::${var.bucket_name}-*/*"
+        "arn:aws:s3:::${aws_s3_bucket.mr_bucket.id}-*",
+        "arn:aws:s3:::${aws_s3_bucket.mr_bucket.id}-*/*"
       ]
     }
   ]
