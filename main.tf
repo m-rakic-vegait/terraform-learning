@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "mr_public_policy" {
       identifiers = [ "*" ]
     }
     actions = [ "s3:GetObject" ]
-    resources = [ "arn:aws:s3::${var.bucket_name}/*" ]
+    resources = [ "arn:aws:s3:::${aws_s3_bucket.mr_bucket.id}/*" ]
   }
 }
 # -- Attach policy to the bucket
@@ -174,7 +174,7 @@ module "ec2_instance" {
 # 3.7. Multiple environments - Use .tfvars files for dev/prod configurations
 # Added env.tfvars and prod.tfvars in envs folder
 
-# 4.1. Create VPC module
+# 4. VPC
 module "vpc" {
   source = "./modules/vpc"
   vpc_cidr = var.vpc_cidr
@@ -185,6 +185,7 @@ module "vpc" {
   tags = var.tags
 }
 
+# 5. Serverless Infrastructure with Lambda
 module "lambda-mr" {
   source = "./modules/lambda_api"
   lambda_name = var.lambda_name
@@ -195,3 +196,5 @@ module "lambda-mr" {
   tags = var.tags
   environment = var.environment
 }
+
+# 6. State Management and Advanced Patterns
