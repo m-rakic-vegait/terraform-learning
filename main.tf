@@ -2,10 +2,19 @@ provider "aws" {
   region = var.region
 }
 
+# 2.6. Local values - Use locals block for reusable values across resources
+locals {
+  tags = {
+    project = "terraform-learning"
+    owner = "test-user"
+    environment = var.environment
+  }
+}
+
 # 1.2. Create S3 bucket
 resource "aws_s3_bucket" "mr_bucket" {
   bucket = var.bucket_name
-  tags = var.tags
+  tags = local.tags
 }
 
 # 1.3. Add versioning
@@ -49,19 +58,19 @@ resource "aws_s3_bucket_policy" "mr_public_access_bucket_policy" {
 # 2.1. Create IAM user
 resource "aws_iam_user" "mr_user" {
   name = var.iam_user_name
-  tags = var.tags
+  tags = local.tags
 }
 
 # 2.2. Reference AWS managed S3ReadOnlyAccess policy
 data "aws_iam_policy" "mr_s3readonly" {
   arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
-  tags = var.tags
+  tags = local.tags
 }
 
 # 2.3. Create custom policy
 resource "aws_iam_policy" "mr_custom" {
   name = var.iam_custom_policy_name
-  tags = var.tags
+  tags = local.tags
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -104,9 +113,6 @@ output "mr_attached_policy_arns" {
     aws_iam_user_policy_attachment.mr_attach_custom.policy_arn,
   ]
 }
-
-# 2.6. Local values - Use locals block for reusable values across resources
-# ...
 
 # 3.1. Define variables - Create variables for instance type, key pair name, environment tags
 # Defined in variables.tf
@@ -163,7 +169,7 @@ module "ec2_instance" {
   monitoring    = true
   # subnet_id     = "my_subnet_id"
 
-  tags = var.tags
+  tags = local.tags
 }
 
 # 3.5. Conditional logic - Use count or for_each for optional resource creation
@@ -182,7 +188,7 @@ module "vpc" {
   private_subnets = var.private_subnets
   availability_zone = var.availability_zone
   vpc_name = var.vpc_name
-  tags = var.tags
+  tags = local.tags
 }
 
 # 5. Serverless Infrastructure with Lambda
@@ -193,7 +199,7 @@ module "lambda-mr" {
   lambda_runtime = var.lambda_runtime
   lambda_timeout = var.lambda_timeout
   lambda_memory = var.lambda_memory
-  tags = var.tags
+  tags = local.tags
   environment = var.environment
 }
 
