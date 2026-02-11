@@ -19,6 +19,9 @@ security_group_description = "Security group description (dev)"
 instance_type = "t2.micro"
 instance_name = "test-instance-dev"
 instance_key_name = "mrakic-dev"
+create_optional_ec2 = true
+optional_instance_name = "optional-test-instance-dev"
+optional_instance_key_name = "optional-mrakic-dev"
 
 # VPC
 vpc_cidr = "10.0.0.0/16"

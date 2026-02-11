@@ -70,6 +70,19 @@ variable "instance_key_name" {
   type = string
 }
 
+variable "create_optional_ec2" {
+  type = bool
+  default = false
+}
+
+variable "optional_instance_name" {
+  type = string
+}
+
+variable "optional_instance_key_name" {
+  type = string
+}
+
 # VPC variables
 variable "vpc_cidr" {
   type = string

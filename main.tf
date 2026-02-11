@@ -208,6 +208,23 @@ module "ec2_instance" {
 }
 
 # 3.5. Conditional logic - Use count or for_each for optional resource creation
+# Create EC2 using condition
+module "ec2_instance_optional" {
+  count = var.create_optional_ec2 ? 1 : 0
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  name = var.optional_instance_name
+  instance_type = var.instance_type
+  key_name      = var.optional_instance_key_name
+  monitoring    = true
+  ami = data.aws_ami.amazon-linux.id
+  security_group_name = module.mr_security_group.security_group_name
+  subnet_id = module.vpc.subnet_id
+
+  tags = merge(
+    var.tags,
+    { name = "ec2-${var.optional_instance_name}" }
+  )
+}
 
 # 3.6. Variable validation - Add validation rules and descriptions for input variables
 # Added in variables.tf for mr_instance_type
