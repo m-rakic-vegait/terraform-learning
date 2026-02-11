@@ -232,10 +232,8 @@ module "ec2_instance_optional" {
 # 3.7. Multiple environments - Use .tfvars files for dev/prod configurations
 # Added env.tfvars and prod.tfvars in envs folder
 
-
-
 # 5. Serverless Infrastructure with Lambda
-module "lambda-mr" {
+module "lambda_mr" {
   source = "./modules/lambda_api"
   lambda_name = var.lambda_name
   lambda_handler = var.lambda_handler
@@ -246,4 +244,66 @@ module "lambda-mr" {
   environment = var.environment
 }
 
-# 6. State Management and Advanced Patterns
+# Task 6
+module "task_6_vpc" {
+  source = "./modules/vpc"
+  vpc_cidr = var.task_6_vpc_cidr
+  public_subnet = var.task_6_public_subnet_cidr_block
+  private_subnets = var.task_6_private_subnet_cidr_blocks
+  availability_zone = var.task_6_availability_zone
+  vpc_name = var.task_6_vpc_name
+  tags = merge(
+    local.task_6_tags,
+    {
+      name = "task-6-vpc-${terraform.workspace}"
+    }
+  )
+}
+
+module "task_6_security_group" {
+  source = "terraform-aws-modules/security-group/aws"
+  name = var.task_6_security_group_name
+  description = var.task_6_security_group_description
+  vpc_id = module.task_6_vpc.id
+  ingress_with_cidr_blocks = [
+    {
+      description = "SSH From"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = var.task_6_public_subnet_cidr_block
+    }
+  ]
+  egress_with_cidr_blocks = [
+    {
+      description = "Allow outbound internet"
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+
+  tags = merge(
+    var.tags,
+    { name = "security-group-${var.task_6_security_group_name}" }
+  )
+}
+
+module "task_6_ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  name = var.task_6_instance_name
+  instance_type = local.instance_type
+  key_name      = var.task_6_instance_key_name
+  monitoring    = true
+  ami = data.aws_ami.amazon-linux.id
+  security_group_name = module.task_6_security_group.security_group_name
+  subnet_id = module.task_6_vpc.subnet_id
+
+  tags = merge(
+    var.tags,
+    {
+      name = "task-6-ec2-${terraform.workspace}"
+    }
+  )
+}
