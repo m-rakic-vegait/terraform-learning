@@ -5,13 +5,20 @@ tags = {
   owner = "milan.rakic"
   environment = "dev"
 }
+
+# S3
 bucket_name = "student-terraform-learning-mr-2026-02-05"
-iam_user_name = "test-student"
+
+# IAM
+iam_user_name = "test-student-dev"
 iam_custom_policy_name = "TestCustomBucketAccessPolicy"
 security_group_name = "terraform-learning-sg"
-security_group_description = "Security group description"
-mr_instance_type = "t2.micro"
-mr_instance_name = "test-instance"
+security_group_description = "Security group description (dev)"
+
+# EC2
+instance_type = "t2.micro"
+instance_name = "test-instance-dev"
+instance_key_name = "mrakic-dev"
 
 # VPC
 vpc_cidr = "10.0.0.0/16"

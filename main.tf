@@ -14,7 +14,10 @@ locals {
 # 1.2. Create S3 bucket
 resource "aws_s3_bucket" "mr_bucket" {
   bucket = var.bucket_name
-  tags = local.tags
+  tags = merge(
+    var.tags,
+    { name = "bucket-${var.bucket_name}" }
+  )
 }
 
 # 1.3. Add versioning
@@ -58,19 +61,24 @@ resource "aws_s3_bucket_policy" "mr_public_access_bucket_policy" {
 # 2.1. Create IAM user
 resource "aws_iam_user" "mr_user" {
   name = var.iam_user_name
-  tags = local.tags
+  tags = merge(
+    var.tags,
+    { name = "user-${var.iam_user_name}" }
+  )
 }
 
 # 2.2. Reference AWS managed S3ReadOnlyAccess policy
 data "aws_iam_policy" "mr_s3readonly" {
   arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
-  tags = local.tags
+  tags = merge(
+    var.tags,
+    { name = "aws-policy-AmazonS3ReadOnlyAccess" }
+  )
 }
 
 # 2.3. Create custom policy
 resource "aws_iam_policy" "mr_custom" {
   name = var.iam_custom_policy_name
-  tags = local.tags
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -92,6 +100,11 @@ resource "aws_iam_policy" "mr_custom" {
   ]
 }
 EOF
+
+  tags = merge(
+    var.tags,
+    { name = "custom-policy-${var.iam_custom_policy_name}" }
+  )
 }
 
 # 2.4. Attach both policies
@@ -135,11 +148,23 @@ data "aws_ami" "amazon-linux" {
   }
 }
 
+# 4. VPC
+module "vpc" {
+  source = "./modules/vpc"
+  vpc_cidr = var.vpc_cidr
+  public_subnet = var.subnet_cidr
+  private_subnets = var.private_subnets
+  availability_zone = var.availability_zone
+  vpc_name = var.vpc_name
+  tags = local.tags
+}
+
 # 3.3. Create security group - Build security group named terraform-learning-sg with SSH access
 module "mr_security_group" {
   source = "terraform-aws-modules/security-group/aws"
   name = var.security_group_name
   description = var.security_group_description
+  vpc_id = module.vpc.vpc_id
   ingress_with_cidr_blocks = [
     {
       description = "SSH From"
@@ -158,18 +183,28 @@ module "mr_security_group" {
       cidr_blocks = "0.0.0.0/0"
     }
   ]
+
+  tags = merge(
+    var.tags,
+    { name = "security-group-${var.security_group_name}" }
+  )
 }
 
 # 3.4. Launch instance - Deploy t2.micro EC2 instance using variables and data sources
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  name = var.mr_instance_name
-  instance_type = var.mr_instance_type
-  key_name      = "user1"
+  name = var.instance_name
+  instance_type = var.instance_type
+  key_name      = var.instance_key_name
   monitoring    = true
-  # subnet_id     = "my_subnet_id"
+  ami = data.aws_ami.amazon-linux.id
+  security_group_name = module.mr_security_group.security_group_name
+  subnet_id = module.vpc.subnet_id
 
-  tags = local.tags
+  tags = merge(
+    var.tags,
+    { name = "ec2-${var.instance_name}" }
+  )
 }
 
 # 3.5. Conditional logic - Use count or for_each for optional resource creation
@@ -180,16 +215,7 @@ module "ec2_instance" {
 # 3.7. Multiple environments - Use .tfvars files for dev/prod configurations
 # Added env.tfvars and prod.tfvars in envs folder
 
-# 4. VPC
-module "vpc" {
-  source = "./modules/vpc"
-  vpc_cidr = var.vpc_cidr
-  public_subnet = var.subnet_cidr
-  private_subnets = var.private_subnets
-  availability_zone = var.availability_zone
-  vpc_name = var.vpc_name
-  tags = local.tags
-}
+
 
 # 5. Serverless Infrastructure with Lambda
 module "lambda-mr" {

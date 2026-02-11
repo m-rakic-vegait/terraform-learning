@@ -53,16 +53,20 @@ variable "security_group_description" {
   description = "Description of security group with SSH access"
 }
 
-variable "mr_instance_type" {
+variable "instance_type" {
   type = string
   description = "EC2 Instance Type"
   validation {
-    condition = contains(["t2.micro", "t2.small", "t2.medium", "t2.large"], var.mr_instance_type)
+    condition = contains(["t2.micro", "t2.small", "t2.medium", "t2.large"], var.instance_type)
     error_message = "Only possible values for EC2 Instance type: t2.micro, t2.small, t2.medium, t2.large."
   }
 }
 
-variable "mr_instance_name" {
+variable "instance_name" {
+  type = string
+}
+
+variable "instance_key_name" {
   type = string
 }
 
