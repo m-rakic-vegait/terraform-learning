@@ -4,6 +4,7 @@ terraform {
     region = "eu-central-1"
     dynamodb_table = "tf-test-locks"
     encrypt = true
-    key = "terraform-learning/terraform.tfstate"
+    key = "network/terraform.tfstate"
+    profile = "vegait"
   }
 }

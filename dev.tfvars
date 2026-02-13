@@ -38,14 +38,14 @@ lambda_timeout = 10
 lambda_memory = 128
 
 # State Management
-task_6_dynamodb_table_name = "task-6-tf-locks-dev"
-task_6_db_password = "dbsecret"
-task_6_public_subnet_cidr_block = "10.1.111.0/24"
-task_6_private_subnet_cidr_blocks = ["10.1.112.0/24", "10.1.113.0/24", "10.1.114.0/24"]
-task_6_availability_zone = "eu-central-1b"
-task_6_security_group_name = "task-6-sg-dev"
-task_6_security_group_description = "Task 6 security group description (dev)"
-task_6_vpc_cidr = "10.1.0.0/16"
-task_6_vpc_name = "task-6-vpc-dev"
-task_6_instance_name = "task-6-instance-dev"
-task_6_instance_key_name = "task-6-instance-key-name-dev"
+# task_6_dynamodb_table_name = "task-6-tf-locks-dev"
+# task_6_db_password = "dbsecret"
+# task_6_public_subnet_cidr_block = "10.1.111.0/24"
+# task_6_private_subnet_cidr_blocks = ["10.1.112.0/24", "10.1.113.0/24", "10.1.114.0/24"]
+# task_6_availability_zone = "eu-central-1b"
+# task_6_security_group_name = "task-6-sg-dev"
+# task_6_security_group_description = "Task 6 security group description (dev)"
+# task_6_vpc_cidr = "10.1.0.0/16"
+# task_6_vpc_name = "task-6-vpc-dev"
+# task_6_instance_name = "task-6-instance-dev"
+# task_6_instance_key_name = "task-6-instance-key-name-dev"

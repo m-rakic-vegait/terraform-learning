@@ -8,6 +8,10 @@ output "subnet_id" {
   value = aws_subnet.this.id
 }
 
+output "private_subnets_id" {
+  value = aws_subnet.private.id
+}
+
 output "internet_gateway_id" {
   description = "The ID of the internet gateway"
   value = aws_internet_gateway.this.id

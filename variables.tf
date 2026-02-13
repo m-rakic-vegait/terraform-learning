@@ -139,63 +139,63 @@ variable "lambda_memory" {
 }
 
 # State Management
-variable "task_6_bucket_name" {
-  type = string
-  description = "The name of s3 bucket for task 6"
-}
+# variable "task_6_bucket_name" {
+#   type = string
+#   description = "The name of s3 bucket for task 6"
+# }
 
-variable "task_6_public_subnet_cidr_block" {
-  type = string
-  description = "CIDR block for the public subnet"
-}
+# variable "task_6_public_subnet_cidr_block" {
+#   type = string
+#   description = "CIDR block for the public subnet"
+# }
 
-variable "task_6_private_subnet_cidr_blocks" {
-  type = list(string)
-  description = "CIDR blocks for the private subnets"
-}
+# variable "task_6_private_subnet_cidr_blocks" {
+#   type = list(string)
+#   description = "CIDR blocks for the private subnets"
+# }
 
-variable "task_6_availability_zone" {
-  type = string
-  description = "AWS Availability Zone for the subnet for task 6"
-}
+# variable "task_6_availability_zone" {
+#   type = string
+#   description = "AWS Availability Zone for the subnet for task 6"
+# }
 
-variable "task_6_security_group_name" {
-  type = string
-  description = "Name of security group for task 6"
-}
+# variable "task_6_security_group_name" {
+#   type = string
+#   description = "Name of security group for task 6"
+# }
 
-variable "task_6_security_group_description" {
-  type = string
-  description = "Description of security group for task 6"
-}
+# variable "task_6_security_group_description" {
+#   type = string
+#   description = "Description of security group for task 6"
+# }
 
-variable "task_6_vpc_cidr" {
-  type = string
-  description = "CIDR block for the VPC for for task 6"
-}
+# variable "task_6_vpc_cidr" {
+#   type = string
+#   description = "CIDR block for the VPC for for task 6"
+# }
 
-variable "task_6_vpc_name" {
-  type = string
-  description = "The name of the VPC for task 6"
-}
+# variable "task_6_vpc_name" {
+#   type = string
+#   description = "The name of the VPC for task 6"
+# }
 
-variable "task_6_dynamodb_table_name" {
-  type = string
-  description = "The name of DynamoDB table for state locking for task 6"
-}
+# variable "task_6_dynamodb_table_name" {
+#   type = string
+#   description = "The name of DynamoDB table for state locking for task 6"
+# }
 
-variable "task_6_db_password" {
-  type = string
-  description = "The name of password for task 6"
-  sensitive = true
-}
+# variable "task_6_db_password" {
+#   type = string
+#   description = "The name of password for task 6"
+#   sensitive = true
+# }
 
-variable "task_6_instance_name" {
-  type = string
-  description = "The name of instance for task 6"
-}
+# variable "task_6_instance_name" {
+#   type = string
+#   description = "The name of instance for task 6"
+# }
 
-variable "task_6_instance_key_name" {
-  type = string
-}
+# variable "task_6_instance_key_name" {
+#   type = string
+# }
 
