@@ -27,7 +27,6 @@ module "ec2_instance_task_6" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   name = var.instance_name
   instance_type = var.instance_type
-  key_name      = var.instance_key_name
   monitoring    = true
   ami = data.aws_ami.ami_linux_task_6.id
   subnet_id = data.terraform_remote_state.network.outputs.network_public_subnet_id

@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 # 2.6. Local values - Use locals block for reusable values across resources
 locals {
   tags = {
@@ -47,7 +43,10 @@ data "aws_iam_policy_document" "mr_public_policy" {
       identifiers = [ "*" ]
     }
     actions = [ "s3:GetObject" ]
-    resources = [ "arn:aws:s3:::${aws_s3_bucket.mr_bucket.id}/*" ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.mr_bucket.id}",
+      "arn:aws:s3:::${aws_s3_bucket.mr_bucket.id}/*"
+    ]
   }
 }
 # -- Attach policy to the bucket
@@ -55,8 +54,6 @@ resource "aws_s3_bucket_policy" "mr_public_access_bucket_policy" {
   bucket = aws_s3_bucket.mr_bucket.id
   policy = data.aws_iam_policy_document.mr_public_policy.json
 }
-
-# Destroy all from task 1 with 'destroy' command...
 
 # 2.1. Create IAM user
 resource "aws_iam_user" "mr_user" {
@@ -149,8 +146,8 @@ data "aws_ami" "amazon-linux" {
 }
 
 # 4. VPC
-module "vpc" {
-  source = "./modules/vpc"
+module "vpc_4" {
+  source = "../../modules/vpc"
   vpc_cidr = var.vpc_cidr
   public_subnet = var.subnet_cidr
   private_subnets = var.private_subnets
@@ -160,11 +157,11 @@ module "vpc" {
 }
 
 # 3.3. Create security group - Build security group named terraform-learning-sg with SSH access
-module "mr_security_group" {
+module "mr_security_group_3" {
   source = "terraform-aws-modules/security-group/aws"
   name = var.security_group_name
   description = var.security_group_description
-  vpc_id = module.vpc.vpc_id
+  vpc_id = module.vpc_4.vpc_id
   ingress_with_cidr_blocks = [
     {
       description = "SSH From"
@@ -192,14 +189,13 @@ module "mr_security_group" {
 
 # 3.4. Launch instance - Deploy t2.micro EC2 instance using variables and data sources
 module "ec2_instance" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
+  source = "terraform-aws-modules/ec2-instance/aws"
   name = var.instance_name
   instance_type = var.instance_type
-  key_name      = var.instance_key_name
   monitoring    = true
   ami = data.aws_ami.amazon-linux.id
-  security_group_name = module.mr_security_group.security_group_name
-  subnet_id = module.vpc.subnet_id
+  security_group_name = module.mr_security_group_3.security_group_name
+  subnet_id = module.vpc_4.subnet_id
 
   tags = merge(
     var.tags,
@@ -214,11 +210,10 @@ module "ec2_instance_optional" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   name = var.optional_instance_name
   instance_type = var.instance_type
-  key_name      = var.optional_instance_key_name
   monitoring    = true
   ami = data.aws_ami.amazon-linux.id
-  security_group_name = module.mr_security_group.security_group_name
-  subnet_id = module.vpc.subnet_id
+  security_group_name = module.mr_security_group_3.security_group_name
+  subnet_id = module.vpc_4.subnet_id
 
   tags = merge(
     var.tags,
@@ -234,7 +229,7 @@ module "ec2_instance_optional" {
 
 # 5. Serverless Infrastructure with Lambda
 module "lambda_mr" {
-  source = "./modules/lambda_api"
+  source = "../../modules/lambda_api"
   lambda_name = var.lambda_name
   lambda_handler = var.lambda_handler
   lambda_runtime = var.lambda_runtime

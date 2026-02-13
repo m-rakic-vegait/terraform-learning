@@ -9,7 +9,7 @@ output "subnet_id" {
 }
 
 output "private_subnets_id" {
-  value = aws_subnet.private.id
+  value = { for k, s in aws_subnet.private: k => s.id }
 }
 
 output "internet_gateway_id" {
