@@ -1,5 +1,6 @@
 data "terraform_remote_state" "network" {
   backend = "s3"
+  workspace = "dev"
 
   config = {
     bucket = "tf-test-bucket-state-2026-02-10"
