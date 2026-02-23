@@ -42,6 +42,12 @@ resource "aws_route_table" "public" {
   )
 }
 
+# Route table association
+resource "aws_route_table_association" "rta1" {
+  subnet_id = aws_subnet.this.id
+  route_table_id = aws_route_table.public.id
+}
+
 # Route
 resource "aws_route" "public_route" {
   route_table_id = aws_route_table.public.id
