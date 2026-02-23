@@ -116,13 +116,7 @@ resource "aws_iam_user_policy_attachment" "mr_attach_custom" {
   policy_arn = aws_iam_policy.mr_custom.arn
 }
 
-# 2.5. Output values - Export user ARN and relevant information
-output "mr_attached_policy_arns" {
-  value = [
-    aws_iam_user_policy_attachment.mr_attach_readonly.policy_arn,
-    aws_iam_user_policy_attachment.mr_attach_custom.policy_arn,
-  ]
-}
+# 2.5. Output values - in outputs.tf
 
 # 3.1. Define variables - Create variables for instance type, key pair name, environment tags
 # Defined in variables.tf
